@@ -28,12 +28,12 @@ docker run --rm \
 ## `learnr` Tutorials
 
 ```
-	```{r setup, include=FALSE}
-	source('rmd_setup.R')
-	```
-	
-	```{r, child="user_check.Rmd"}
-	```
+ ```{r setup, include=FALSE}
+ source('rmd_setup.R')
+ ```
+ 
+ ```{r, child="user_check.Rmd"}
+ ```
 ```
 
 Links to relevant R packages:

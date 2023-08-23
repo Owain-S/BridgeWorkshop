@@ -1,0 +1,18 @@
+```{r, context="server"}
+output$user_check <- renderText({
+	query <- parseQueryString(session$clientData$url_search)
+	txt <- ''
+	if(length(query) == 0) {
+		txt <- '<div class="alert alert-danger" role="alert">You are not currently logged in. Your results will not be saved. Please go to the main application page by <a href="/app/" target="_parent">clicking here</a>.</div>'
+	} else {
+		txt <- paste0('<div class="alert alert-success" role="alert">You are currenlty logged in as ',
+					  query$user, '</div>')
+	}
+	return(txt)
+})
+
+```
+
+```{r, context = 'render', results = 'asis', echo = FALSE}
+htmlOutput('user_check')
+```

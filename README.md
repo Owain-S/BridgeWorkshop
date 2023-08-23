@@ -1,46 +1,63 @@
+
 # CUNY MSDS Bridge Tutorial
 
+This repository contains the bridge tutorials for the [CUNY School of
+Professional Studies](https://sps.cuny.edu) [Master of Science in Data
+Science](http://catalog.sps.cuny.edu/preview_program.php?catoid=2&poid=607).
+The tutorials are written using the
+[`learnr`](https://rstudio.github.io/learnr/) R package. A
+[Shiny](https://shiny.posit.co) application wraps those tutorials to
+manager user management (i.e. logging in), saving of student progress,
+and an administrative interface to check student progress.
 
+Because each `learnr` tutorial is converted to Shiny application, it is
+not possible to test the integration with the main Shiny application
+using the RStudio desktop environment. To be able to tested the
+integration we will use Docker to deploy the main Shiny applicaiton and
+all `learnr` tutorials. To begin, you will need to install Docker for
+[Mac](https://docs.docker.com/desktop/install/mac-install/) or
+[Windows](https://docs.docker.com/desktop/install/windows-install/).
 
+Once installed, the following command will build the Docker image. Note
+that this can take quite a while the first time as it downloads all the
+dependencies.
 
-Install Docker for [Mac](https://docs.docker.com/desktop/install/mac-install/) or [Windows](https://docs.docker.com/desktop/install/windows-install/).
+    docker build --platform linux/x86_64 -t msdsbridge .
 
+The following command will run the Docker image.
 
+    docker run --rm -p 3838:3838 -v ./shinylog/:/var/log/shiny-server/ -v ./:/srv/shiny-server/ msdsbridge
 
-```
-docker build --platform linux/x86_64 -t msdsbridge .
-```
-
-```
-docker run --rm -p 3838:3838 -v ./shinylog/:/var/log/shiny-server/ -v ./:/srv/shiny-server/ msdsbridge
-```
-
-Run a RStudio server locally:
-
-```
-docker run --rm \
-  -p 127.0.0.1:8787:8787 \
-  -e DISABLE_AUTH=true \
-  rocker/rstudio
-```
-
+Once running, you can go to <http://localhost:3838> to test the
+application. You can click the stop button or `ctrl + C` to quit the
+Docker image.
 
 ## `learnr` Tutorials
 
-```
- ```{r setup, include=FALSE}
- source('rmd_setup.R')
- ```
- 
- ```{r, child="user_check.Rmd"}
- ```
-```
+The following R chunks need to be added to each `learnr` tutorial.
 
-Links to relevant R packages:
+```` markdown
+```{r, include=FALSE}
+source("rmd_setup.R")
+```
+````
 
-* [`learnr`](https://rstudio.github.io/learnr/)
-* [`gradethis`](https://github.com/rstudio/gradethis)
-* [`shinymanager`](https://datastorm-open.github.io/shinymanager/)
-* [Prerendered Shiny Documents](https://rmarkdown.rstudio.com/authoring_shiny_prerendered.HTML)
-* [Recording answers from learnr](https://stackoverflow.com/questions/51778262/how-can-i-record-exercise-submission-in-a-learnr-r-tutorial)
-* [Mathematics for Data Science](https://towardsdatascience.com/mathematics-for-data-science-e53939ee8306)
+This chunk will make sure the tutorial is being accessed through the
+Shiny applicaiton and that the student is logged in.
+
+```` markdown
+```{r, child="user_check.Rmd"}
+```
+````
+
+## Resources
+
+- [`learnr`](https://rstudio.github.io/learnr/)
+- [`gradethis`](https://github.com/rstudio/gradethis)
+- [`shinymanager`](https://datastorm-open.github.io/shinymanager/)
+- [Prerendered Shiny
+  Documents](https://rmarkdown.rstudio.com/authoring_shiny_prerendered.HTML)
+- [Recording answers from
+  learnr](https://stackoverflow.com/questions/51778262/how-can-i-record-exercise-submission-in-a-learnr-r-tutorial)
+- [Mathematics for Data
+  Science](https://towardsdatascience.com/mathematics-for-data-science-e53939ee8306)
